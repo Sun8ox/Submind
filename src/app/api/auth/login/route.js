@@ -9,7 +9,7 @@ export async function POST(request) {
         
         if (!email && !username || !password) {
             return NextResponse.json(
-                { success: false, error: "Username and password are required" },
+                { success: false, message: "Username and password are required" },
                 { status: 400, headers: { "Content-Type": "application/json" } }
             );
         }
@@ -18,7 +18,7 @@ export async function POST(request) {
 
         if (!success) {
             return NextResponse.json(
-                { success: false, error: message },
+                { success: false, message: message },
                 { status: 401, headers: { "Content-Type": "application/json" } });
             }
 
@@ -34,13 +34,12 @@ export async function POST(request) {
             maxAge: 60 * 60 * 24 * 1, // 1 day
         })
 
-
         return response;
     } catch (error) {
         console.error("Login error:", error);
 
         return NextResponse.json(
-            { error: "Internal server error" },
+            { success: false, message: "Internal server error" },
             { status: 500, headers: { "Content-Type": "application/json" }
         });
     }
