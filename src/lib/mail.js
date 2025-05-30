@@ -1,7 +1,7 @@
-export default function generateVerifictionEmail(email, token) {
-    
-}
+// TODO
 
-export default async function sendMail(mailOptions) {
+export function generateVerificationMail(email, token) {
+    console.log(`Sending verification email to ${email} with token ${token}`);
 
+    return { success: true, message: "Feature not implemented yet, sending to console" };
 }
