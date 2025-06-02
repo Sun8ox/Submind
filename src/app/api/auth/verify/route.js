@@ -1,11 +1,11 @@
 import { NextResponse } from 'next/server';
 import { validateToken } from '@/lib/auth';
 import { dbVerifyUser } from '@/lib/db';
-
+import { validateUserId } from '@/lib/validate';
 
 export async function POST(request) {
     try {
-        const { userId, token } = await request.json();
+        const { token } = await request.json();
         const cookieStore = await request.cookies;
 
         // Validate input
@@ -19,11 +19,11 @@ export async function POST(request) {
         if (!jwtToken) return NextResponse.json({ success: false, message: "Authentication token is required" }, { status: 401 });
 
         // Get user ID from the JWT token
-        const tokenValue = await validateToken(jwtToken.value);
-        
+        const tokenValue = await validateToken(jwtToken.value);      
+
         // Verify user ID from JWT token
         if (tokenValue.success === false) return NextResponse.json({ success: false, message: "Invalid authentication token" }, { status: 401 });
-        if (tokenValue.userId !== userId) return NextResponse.json({ success: false, message: "User ID does not match" }, { status: 403 });
+        const userId = tokenValue.userId;
 
         // Verify the user with the provided token
         const verificationResult = await dbVerifyUser(token, userId);

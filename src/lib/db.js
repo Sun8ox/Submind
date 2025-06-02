@@ -60,9 +60,13 @@ export async function dbVerifyUser(token, userId) {
 
     // Check if the token matches
     const verification = rows[0];
-    if (verification.token !== token) return false;
+
+    console.log(verification);
+    console.log(token);
+
+    if (String(verification.token).trim() !== String(token).trim()) return false; // Very weird but it works
     
-    // Delete roken from database and mark user as verified
+    // Delete token from database and mark user as verified
     await sql.query("DELETE FROM auth.verification WHERE userid = $1;", [userId]);
     await sql.query("UPDATE auth.users SET verified = true WHERE id = $1;", [userId]);
 

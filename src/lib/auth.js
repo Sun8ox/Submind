@@ -2,6 +2,7 @@ import bscryptjs from 'bcryptjs';
 import { getUserByEmail, getUserByUsername, getUserById, dbChangePassword, dbCreateUser, dbCreateVerificationToken, checkIfUsernameOrEmailExists } from './db.js';
 import jwt from 'jsonwebtoken';
 import { generateVerificationMail } from '@/lib/mail';
+import { NextResponse } from 'next/server';
 
 // Ensure JWT_SECRET is defined
 const JWT_SECRET = process.env.JWT_SECRET;
@@ -12,6 +13,8 @@ export async function validateToken(token) {
     try {
         // Verify the JWT token and retun success and decoded data
         const decoded = jwt.verify(token, JWT_SECRET);
+        if (!decoded || !decoded.id) return { success: false, message: "Invalid token" };
+
         return { success: true, userId: decoded.id };
     } catch (error) {
         // In case of wrong token, return failure
@@ -26,8 +29,7 @@ export async function registerUser(userData) {
 
         const { email, username, password } = userData;
 
-        if (!email || !username || !password) return { success: false, message: "Email, username and password are required" };
-        
+        if (!email || !username || !password) return { success: false, message: "Email, username and password are required" };        
 
         // Check if username or email already exists
         const exists = checkIfUsernameOrEmailExists(username, email)
@@ -54,9 +56,13 @@ export async function registerUser(userData) {
         
         const emailVerificationStatus = generateVerificationMail(email, verificationTokenFromDb);
         if (!emailVerificationStatus.success) return { success: false, message: "Failed to send verification email" };
+
+        // Sign JWT token to authenticate user
+        const token = jwt.sign({ id: userId }, JWT_SECRET, { expiresIn: '7d' });
+        if (!token) return { success: false, message: "Failed to create authentication token" };
         
         // Return success message
-        return { success: true, message: "Registration successful. " + emailVerificationStatus.message };
+        return { success: true, message: "Registration successful. " + emailVerificationStatus.message, token: token };
 
 
     } catch (error) {
@@ -88,7 +94,7 @@ export async function authenticateUser(userLoginData) {
         }
 
         // Sign JWT token to authenticate user
-        const token = jwt.sign({ id: userId }, JWT_SECRET, { expiresIn: '7d' });
+        const token = jwt.sign({ id: userData.id }, JWT_SECRET, { expiresIn: '7d' });
 
         return {
             success: true,
@@ -133,4 +139,13 @@ export async function changePassword(userId, oldPassword, newPassword) {
         console.error("Error changing password:", error);
         return { success: false, message: "Failed to change password" };
     }
+}
+
+export function logout(request) {
+    const response = NextResponse.redirect(new URL('/', request.url));
+    response.cookies.set('Submind.AuthToken', '', {
+        maxAge: -1, 
+    });
+
+    return response
 }
