@@ -1,7 +1,7 @@
 import bscryptjs from 'bcryptjs';
 import { getUserByEmail, getUserByUsername, getUserById, dbChangePassword, dbCreateUser, dbCreateVerificationToken, checkIfUsernameOrEmailExists } from './db.js';
 import jwt from 'jsonwebtoken';
-import { generateVerificationMail } from '@/lib/mail';
+import { generateVerificationMail } from '@/lib/auth/mail.js';
 import { NextResponse } from 'next/server';
 
 // Ensure JWT_SECRET is defined

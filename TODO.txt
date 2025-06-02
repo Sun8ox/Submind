@@ -1,0 +1,38 @@
+TODO:
+
+Blob:
+- handling uploads
+- handling views (signed urls)
+
+Auth:
+- editing account info and profile pictures
+
+Videos:
+- adding
+- getting
+- home page
+- liking
+- adding comments
+
+Subscriptions:
+- payment system
+- subscription page (view, prolong, cancel subscriptions etc.)
+
+UI:
+- almost everything
+    User:
+    - main page (see videos)
+    - account page (see your account info, change subscriptions and etc)
+    - player page with comments, likes, description and etc
+    Creator:
+    - upload page
+    - earnings and subscription "analytics" (or smt like that) page
+    - settings
+
+
+Optional:
+    UI:
+        Admin:
+        - view users, block them and etc
+
+- admin management page

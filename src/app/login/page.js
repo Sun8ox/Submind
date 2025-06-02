@@ -1,12 +1,15 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
   const [emailOrUsername, setEmailOrUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+
+  const router = useRouter();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -37,11 +40,7 @@ export default function LoginPage() {
       setPassword("");
       setSuccess("Login successful!");
 
-
-      
-      // TODO: Redirect
-
-
+      router.push("/");
     } else {
         setError(result.message || "Login failed. Please try again.");
     }

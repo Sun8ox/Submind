@@ -1,18 +1,22 @@
 import { NextResponse } from 'next/server';
-import { changePassword, validateToken } from '@/lib/auth'; 
-import { validateUserId, validatePassword } from '@/lib/validate';
+import { changePassword, validateToken } from '@/lib/auth/auth'; 
+import { validateUserId, validatePassword } from '@/lib/auth/validate';
 
 export async function POST(request) {
     try {
         const { oldPassword, newPassword } = await request.json();
 
+        // Get cookies and auth token
         const cookieStore = await request.cookies;
-        const token = cookieStore.get('Submind.AuthToken');
+        const authToken = cookieStore.get('Submind.AuthToken');
         
-        if (!token) return NextResponse.json({ success: false, message: "Authentication token is missing" }, { status: 401 });
+        // Check if auth token exists
+        if (!authToken) return NextResponse.json({ success: false, message: "Authentication token is missing" }, { status: 401 });
 
-        const { success: decodingStatus, message: decodingMessage, userId } = await validateToken(token.value);
+        // Decode and validate the token
+        const { success: decodingStatus, message: decodingMessage, userId } = await validateToken(authToken.value);
         
+        // Check if decoding was successful and userId is present
         if (decodingStatus.success === false) return NextResponse.json({ success: false, message: decodingMessage }, { status: 401 });
         if (!userId) return NextResponse.json({ success: false, message: "User ID not found in token" }, { status: 401 });
 
