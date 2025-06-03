@@ -1,15 +1,12 @@
 TODO:
 
-Blob:
-- handling uploads
-- handling views (signed urls)
+Security:
+- Middleware
 
 Auth:
 - editing account info and profile pictures
 
 Videos:
-- adding
-- getting
 - home page
 - liking
 - adding comments
@@ -28,7 +25,6 @@ UI:
     - upload page
     - earnings and subscription "analytics" (or smt like that) page
     - settings
-
 
 Optional:
     UI:
