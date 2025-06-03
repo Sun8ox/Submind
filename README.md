@@ -6,10 +6,11 @@ Postavená na Next.js, Backend by sa dal v budúcnosti prerobiť aj na nejakú i
 Vercel
 
 ## Storage  
-Vercel blob storage (pre jednoduchosť)
+~~Vercel blob storage~~  
+Cloudflare R2 (S3 compatible API)
 
 ## Database  
-Neon serverless db (taktiež pre jednoduchosť)
+Neon serverless db
 
 ## Mail
 Resend
