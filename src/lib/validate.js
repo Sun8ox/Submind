@@ -32,9 +32,9 @@ export function validateUserId(userId) {
 }
 
 // Text: 1-1000 chars, no HTML tags
-export function validateText(text) {
+export function validateText(text, minchar = 1, maxchar = 1000) {
     if (typeof text !== "string") return { success: false, message: "Text must be a string" };
-    if (text.length < 1 || text.length > 1000) return { success: false, message: "Text must be between 1 and 1000 characters" };
+    if (text.length < minchar || text.length > maxchar) return { success: false, message: "Text must be between " + minchar + " and " + maxchar + " characters" };
     if (/<[^>]+>/.test(text)) return { success: false, message: "Text contains invalid characters" }; // no HTML tags
 
     return { success: true };

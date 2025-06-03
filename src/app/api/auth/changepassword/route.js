@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { changePassword, validateToken } from '@/lib/auth/auth'; 
-import { validateUserId, validatePassword } from '@/lib/auth/validate';
+import { validateUserId, validatePassword } from '@/lib/validate';
 
 export async function POST(request) {
     try {
