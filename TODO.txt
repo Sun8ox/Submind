@@ -34,5 +34,6 @@ Optional:
     UI:
         Admin:
         - view users, block them and etc
+    Allow both subscriptions to watch something
 
 - admin management page
