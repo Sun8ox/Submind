@@ -7,9 +7,11 @@ Auth:
 - editing account info and profile pictures
 
 Videos:
+- free content
 - home page
 - liking
 - adding comments
+
 
 Subscriptions:
 - payment system

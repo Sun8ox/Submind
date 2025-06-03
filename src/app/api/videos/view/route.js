@@ -20,12 +20,6 @@ export async function GET(request) {
         const { success: decodingStatus, message: decodingMessage, userId } = await validateToken(authToken.value);
         if (decodingStatus.success === false) return NextResponse.json({ success: false, message: decodingMessage }, { status: 401 });
         if (!userId) return NextResponse.json({ success: false, message: "User not found" }, { status: 401 });
-
-        // Get user's subscription data
-        const subscriptionData = await getSubscriptionByUserId(userId);
-        if (!subscriptionData) return NextResponse.json({ success: false, message: "Subscription not found" }, { status: 404 });
-        const isSubscriptionValid = isNextPaymentDue(subscriptionData.nextpayment);
-        if (!isSubscriptionValid) return NextResponse.json({ success: false, message: "Your subscription is not active. Please renew your subscription to view videos." }, { status: 403 });
         
         // Get video ID from the request query
         const videoId = request.nextUrl.searchParams.get('videoId');
@@ -37,7 +31,16 @@ export async function GET(request) {
         // Get video info from the database
         const videoInfo = await getVideoInfoById(videoId);
         if (!videoInfo) return NextResponse.json({ success: false, message: "Video not found" }, { status: 404 });
-        if (String(videoInfo.author).trim() !== String(userId).trim() && subscriptionData.type !== videoInfo.subscription) return NextResponse.json({ success: false, message: "You do not have permission to view this video" }, { status: 403 });
+
+        // Get user's subscription data
+        if (videoInfo.subscription !== "Free"){
+            const subscriptionData = await getSubscriptionByUserId(userId);
+            if (!subscriptionData) return NextResponse.json({ success: false, message: "Subscription not found" }, { status: 404 });
+            const isSubscriptionValid = isNextPaymentDue(subscriptionData.nextpayment);
+            if (!isSubscriptionValid) return NextResponse.json({ success: false, message: "Your subscription is not active. Please renew your subscription to view videos." }, { status: 403 });
+
+            if (String(videoInfo.author).trim() !== String(userId).trim() && subscriptionData.type !== videoInfo.subscription) return NextResponse.json({ success: false, message: "You do not have permission to view this video" }, { status: 403 });
+        }
 
         // getting signed URL for the video file
 

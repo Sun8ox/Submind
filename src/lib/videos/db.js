@@ -24,3 +24,11 @@ export async function setVideoUrl(video_id, url) {
 
     return rows[0] || null;
 }
+
+export async function getVideosBySubscription(subscriptionType, pageNumber = 1, pageSize = 10, publicity = "Public") {
+    const offset = (pageNumber - 1) * pageSize;
+
+    const rows = await sql.query("SELECT * FROM videos.info WHERE subscription = $1 AND publicity = $2 ORDER BY created_at DESC LIMIT $3 OFFSET $4", [subscriptionType, publicity, pageSize, offset]);
+    
+    return rows || [];
+}
