@@ -1,4 +1,4 @@
-import { validateToken } from "./auth.js";
+import { validateToken } from "./auth.js";
 import { getUserById } from "./db.js";
 
 export async function getUserData(authToken) {
@@ -16,6 +16,7 @@ export async function getUserData(authToken) {
         const userData = await getUserById(userId);
         if (!userData) return { success: false, message: "User not found." };
         if (userData.banned) return { success: false, message: "User is banned." };
+        if (userData.verified === false) return { success: false, message: "User is not verified." };
 
         // Return user data
         return { success: true, user: userData };
@@ -29,6 +30,26 @@ export async function getUserByUsername(username) {
 
 }
 
+export async function getPublicUserInfo(userId){
+    const userData = await getUserById(userId);
+    if (!userData) return { success: false, message: "User not found." };
+    return {
+        success: true,
+        user: {
+            id: userData.id,
+            username: userData.username,
+            role: userData.role,
+            bio: userData.bio,
+            createdAt: userData.created_at
+        }
+    };
+}
+
+
+
+// TODO
 export async function editUser(userId, userData){
+    const { fullname, bio } = userData;
+
 
 }

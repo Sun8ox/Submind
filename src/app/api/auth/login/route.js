@@ -19,12 +19,12 @@ export async function POST(request) {
         if (username) {
             // Username
             const { success: usernameValid } = validateUsername(username);
-            if (!usernameValid) return NextResponse.json({ success: false, message: "Wrong username or password! ER: u1" }, { status: 400, headers: { "Content-Type": "application/json" } });
+            if (!usernameValid) return NextResponse.json({ success: false, message: "Wrong username or password!" }, { status: 400, headers: { "Content-Type": "application/json" } });
 
         } else {
             // Email
             const { success: emailValid } = validateEmail(email);
-            if (!emailValid) return NextResponse.json({ success: false, message: "Wrong username or password! ER: e1" }, { status: 400, headers: { "Content-Type": "application/json" } });
+            if (!emailValid) return NextResponse.json({ success: false, message: "Wrong username or password!" }, { status: 400, headers: { "Content-Type": "application/json" } });
         }
 
         // Validate password

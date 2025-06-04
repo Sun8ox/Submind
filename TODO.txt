@@ -7,10 +7,15 @@ Auth:
 - editing account info - in progress
 - profile pictures
 
+// Not very important
+- deleting accounts
+
 Videos:
 - home page - partialy done
+- deleting videos
+- editing 
 
-
+// Not very important
 - thumbnails
 - liking
 - adding comments
