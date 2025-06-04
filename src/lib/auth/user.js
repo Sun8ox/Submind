@@ -26,6 +26,7 @@ export async function getUserData(authToken) {
     }
 }
 
+// TODO
 export async function getUserByUsername(username) {
 
 }
@@ -44,7 +45,6 @@ export async function getPublicUserInfo(userId){
         }
     };
 }
-
 
 
 // TODO
