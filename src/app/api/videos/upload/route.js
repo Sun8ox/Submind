@@ -1,11 +1,10 @@
-import { validateToken } from '@/lib/auth/auth';
 import { NextResponse } from 'next/server';
 import { validateText } from '@/lib/validate';
 
 import { SubscriptionTypes } from '@/lib/subscriptions/types';
 import { createVideoInfo } from '@/lib/videos/db';
 import { getPresignedVideoUrl } from '@/lib/videos/storage';
-import { getUserById } from '@/lib/auth/db';
+import { getUserData } from '@/lib/auth/user';
 
 const validContentTypes = ["video/mp4", "video/webm", "video/ogg"];
 
@@ -18,31 +17,24 @@ export async function POST(request) {
         const cookieStore = await request.cookies;
         const authToken = cookieStore.get('Submind.AuthToken');
 
-        // Check if auth token exists
-        if (!authToken) return NextResponse.json({ success: false, message: "Authentication token is missing" }, { status: 401 });
-        if (!authToken.value) return NextResponse.json({ success: false, message: "Authentication token is invalid" }, { status: 401 });
+       // Check auth token
+        const { success, message, user } = await getUserData(authToken);
+        if (!success) return NextResponse.json({ success: false, message: message }, { status: 401 });
 
-        // Decode and validate the token
-        const { success: decodingStatus, message: decodingMessage, userId } = await validateToken(authToken.value);
-        if (decodingStatus.success === false) return NextResponse.json({ success: false, message: decodingMessage }, { status: 401 });
-        if (!userId) return NextResponse.json({ success: false, message: "User not found" }, { status: 401 });
-
-        // Get userdata from the database
-        const userData = await getUserById(userId);
-        if (!userData) return NextResponse.json({ success: false, message: "User not found" }, { status: 404 });
-        if (userData.banned) return NextResponse.json({ success: false, message: "User account is banned" }, { status: 403 });
-        if (userData.role !== "CREATOR" && userData.role !== "ADMIN") return NextResponse.json({ success: false, message: "You do not have permission to upload videos" }, { status: 403 });
+        if (user.role !== "CREATOR" && user.role !== "ADMIN") return NextResponse.json({ success: false, message: "You do not have permission to upload videos" }, { status: 403 });
     
-        // userId is valid, proceed with the request
 
-        const { name, fileSize, description = "None", contentType = "video/mp4", subscription = "Basic" } = await request.json();
+        const { name, fileSize, description = "None", contentType = "video/mp4", subscription = "Basic", publicity = "Public" } = await request.json();
 
         // Validate required fields
-        if (!name || typeof name !== 'string' || name.trim() === '') return NextResponse.json({ success: false, message: "Video name is required" }, { status: 400 });
+
+        //
+        // TODO: Simpilify validations
+        //
+
         const { success: nameValid, message: nameValidationFailedMessage } = validateText(name, 1, 100);
         if (!nameValid) return NextResponse.json({ success: false, message: nameValidationFailedMessage }, { status: 400 });
         
-        if (description && typeof description !== 'string') return NextResponse.json({ success: false, message: "Description must be a string" }, { status: 400 });
         const { success: descriptionValid, message: descriptionValidationFailedMessage } = validateText(description, 0, 500);
         if (!descriptionValid) return NextResponse.json({ success: false, message: descriptionValidationFailedMessage }, { status: 400 });
         
@@ -56,14 +48,17 @@ export async function POST(request) {
         if (fileSize && fileSize <= 0) return NextResponse.json({ success: false, message: "File size must be greater than 0" }, { status: 400 });
         if (fileSize && fileSize > fileMaxSize) return NextResponse.json({ success: false, message: "File is too big." }, { status: 400 });
 
+        if (publicity && typeof publicity !== 'string') return NextResponse.json({ success: false, message: "Publicity must be a string" }, { status: 400 });
+        if (publicity && publicity !== "Public" && publicity !== "Private" && publicity != "Uncategorized") return NextResponse.json({ success: false, message: "Invalid publicity type" }, { status: 400 });
+
     
         // Create video info
         const videoInfo = {
             name: name,
             description: description || "None",
-            author: userId || "Unknown",
+            author: user.id || "Unknown",
             subscription_type: subscription || "Basic",
-            video_url: null
+            publicity: publicity || "Public",
         };
 
         // Create video info in the database

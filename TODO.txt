@@ -4,14 +4,16 @@ Security:
 - Middleware
 
 Auth:
-- editing account info and profile pictures
+- editing account info - in progress
+- profile pictures
 
 Videos:
-- free content
-- home page
+- home page - partialy done
+
+
+- thumbnails
 - liking
 - adding comments
-
 
 Subscriptions:
 - payment system
