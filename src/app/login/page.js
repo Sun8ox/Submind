@@ -43,8 +43,12 @@ export function LoginForm() {
       setSuccess("Login successful!");
 
       const redirectUrl = searchParams.get("redirect") || "/";
-
-      router.push(redirectUrl);
+      console.log("Redirecting to:", redirectUrl);
+      
+      setTimeout(() => {
+        router.push(redirectUrl);
+      }
+      , 500); 
     } else {
         setError(result.message || "Login failed. Please try again.");
     }

@@ -31,20 +31,31 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex flex-col items-center py-10">
       <h1 className="text-4xl font-bold text-indigo-800 mb-2">Welcome to Submind</h1>
-      <h2 className="text-xl text-indigo-600 mb-8">Videos that you have access to:</h2>
       {loading && <div className="text-gray-600">Loading...</div>}
       {error && <div className="text-red-600 mb-4">{error}</div>}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-5xl">
+      <div className="flex flex-col gap-4 w-full md:max-w-3/4">
         {videos.length === 0 && !loading && !error && (
           <div className="col-span-1 md:col-span-2 lg:col-span-3 text-center text-gray-500">
             No videos available at the moment.
           </div>
         )}
         {videos.map(video => (
-          <a href={"/player/" + video.id} key={video.id} className="bg-white rounded-xl shadow p-4 flex flex-col">
+          <a href={"/player/" + video.id} key={video.id} className="relative h-30 bg-white rounded-xl shadow p-4 flex flex-col">
             <div className="font-semibold text-lg text-indigo-700 mb-2">{video.name}</div>
             <div className="text-gray-600 mb-1">{video.description}</div>
-            <div className="text-xs text-gray-500">Subscription: {video.subscription}</div>
+            <div className="text-xs text-gray-500 flex flex-row gap-1 bg-white absolute bottom-2 left-2">
+              <span>
+                Subscription: <span className="font-semibold">{video.subscription}</span>
+              </span>
+              <span>|</span>
+              <span>
+                Author: <span className="font-semibold">{video.author}</span>
+              </span>
+              <span>|</span>
+              <span>
+                Created at: <span className="font-semibold">{new Date(video.created_at).toLocaleString()}</span>
+              </span>
+            </div>
           </a>
         ))}
       </div>

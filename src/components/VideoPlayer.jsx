@@ -56,6 +56,12 @@ export default function VideoPlayer({ videoId }) {
             <p className="text-gray-600">{videoInfo.description}</p>
             <div className="flex items-center space-x-4 mt-2">
               <span className="text-sm text-gray-500">
+                Author: <span className="font-bold">{videoInfo.author}</span>
+              </span>
+              <span className="text-sm text-gray-500">
+                Subscription: <span className="font-bold">{videoInfo.subscription}</span>
+              </span>
+              <span className="text-sm text-gray-500">
                 Likes: <span className="font-bold">{videoInfo.likes}</span>
               </span>
               <span className="text-sm text-gray-500">

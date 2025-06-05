@@ -36,12 +36,12 @@ export async function POST(request, { params }) {
         const { success: authValidSuccess, message: authValidMessage, userId } = await validateAuthToken(authToken);
         if (!authValidSuccess) return NextResponse.json({ success: false, message: authValidMessage }, { status: 401 });
 
-        // Get current video data
+        // Get current video dataß
         const videoInfo = await getVideoInfoById(videoId);
         if (!videoInfo) return NextResponse.json({ success: false, message: 'Video not found' }, { status: 404 });
 
         // Check if user is the owner of the video
-        if (videoInfo.author != userId) return NextResponse.json({ success: false, message: 'You do not have permission to edit this video' }, { status: 403 });
+        if (videoInfo.authorid != userId) return NextResponse.json({ success: false, message: 'You do not have permission to edit this video' }, { status: 403 });
 
         // Prepare update data
         const updateData = {

@@ -44,7 +44,7 @@ export async function POST(request) {
 
         const videoInfo = await getVideoInfoById(videoId);
         if (!videoInfo) return NextResponse.json({ success: false, message: "Video not found" }, { status: 404 });
-        if (videoInfo.author != user.id) return NextResponse.json({ success: false, message: "You do not have permission to reupload this video" }, { status: 403 });
+        if (videoInfo.authorId != user.id) return NextResponse.json({ success: false, message: "You do not have permission to reupload this video" }, { status: 403 });
 
 
         // Get Presigned URL for upload

@@ -12,15 +12,15 @@ export async function getVideoInfoById(video_id) {
 export async function getVideosByUserId(userId, pageNumber = 1, pageSize = 10) {
     const offset = (pageNumber - 1) * pageSize;
 
-    const rows = await sql.query("SELECT * FROM videos.info WHERE author = $1 ORDER BY created_at DESC LIMIT $2 OFFSET $3", [userId, pageSize, offset]);
+    const rows = await sql.query("SELECT * FROM videos.info WHERE authorid = $1 ORDER BY created_at DESC LIMIT $2 OFFSET $3", [userId, pageSize, offset]);
     
     return rows || [];
 }
 
 export async function createVideoInfo(video_info) {
-    const { name, description, author, subscription_type, publicity } = video_info;
+    const { name, description, author, authorId, subscription_type, publicity } = video_info;
 
-    const rows = await sql.query("INSERT INTO videos.info (name, description, author, subscription, publicity) VALUES ($1, $2, $3, $4, $5) RETURNING *", [name, description, author, subscription_type, publicity]);
+    const rows = await sql.query("INSERT INTO videos.info (name, description, author, authorid, subscription, publicity) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *", [name, description, author, authorId, subscription_type, publicity]);
     
     if (rows.length === 0) return null;
     return rows[0] || null;

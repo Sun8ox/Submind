@@ -28,10 +28,6 @@ export async function POST(request) {
 
         // Validate required fields
 
-        //
-        // TODO: Simpilify validations
-        //
-
         const { success: nameValid, message: nameValidationFailedMessage } = validateText(name, 1, 100);
         if (!nameValid) return NextResponse.json({ success: false, message: nameValidationFailedMessage }, { status: 400 });
         
@@ -56,7 +52,8 @@ export async function POST(request) {
         const videoInfo = {
             name: name,
             description: description || "None",
-            author: user.id || "Unknown",
+            author: user.username || "Unknown",
+            authorId: user.id,
             subscription_type: subscription || "Basic",
             publicity: publicity || "Public",
         };

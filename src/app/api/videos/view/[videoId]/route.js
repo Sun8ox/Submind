@@ -39,7 +39,7 @@ export async function GET(request, { params }) {
             if (!isSubscriptionValid) return NextResponse.json({ success: false, message: "Your subscription is not active. Please renew your subscription to view videos." }, { status: 403 });
 
             // Check if the user has permission to view the video
-            if (String(videoInfo.author).trim() !== String(user.id).trim() && subscriptionData.type !== videoInfo.subscription) return NextResponse.json({ success: false, message: "You do not have permission to view this video" }, { status: 403 });
+            if (videoInfo.authorId != user.id && subscriptionData.type !== videoInfo.subscription) return NextResponse.json({ success: false, message: "You do not have permission to view this video" }, { status: 403 });
         }
 
 
