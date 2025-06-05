@@ -8,7 +8,7 @@ export default function EditVideoPage({ params }) {
   const [form, setForm] = useState({
     name: "",
     description: "",
-    subscription_type: "",
+    subscription: "",
     publicity: ""
   });
   const [loading, setLoading] = useState(true);
@@ -26,7 +26,7 @@ export default function EditVideoPage({ params }) {
           setForm({
             name: data.video.name || "",
             description: data.video.description || "",
-            subscription_type: data.video.subscription_type || "",
+            subscription: data.video.subscription || "",
             publicity: data.video.publicity || ""
           });
           setError("");
@@ -58,8 +58,10 @@ export default function EditVideoPage({ params }) {
     if (data.success) {
       setSuccess("Video updated successfully!");
       setError("");
-      // Optionally redirect after save:
-      // router.push("/creator/videos");
+      
+      setTimeout(() => {
+        router.push("/creator/videos/");
+      }, 500);
     } else {
       setError(data.message || "Failed to update video.");
       setSuccess("");
@@ -93,24 +95,30 @@ export default function EditVideoPage({ params }) {
             maxLength={500}
             rows={3}
           />
-          <input
-            type="text"
-            name="subscription_type"
-            placeholder="Subscription Type"
+          <select
+            name="subscription"
             className="p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-400"
-            value={form.subscription_type}
+            value={form.subscription}
             onChange={handleChange}
-            maxLength={10}
-          />
-          <input
-            type="text"
+            required
+          >
+            <option value="">Select Subscription</option>
+            <option value="Free">Free</option>
+            <option value="Basic">Basic</option>
+            <option value="Premium">Premium</option>
+          </select>
+          <select
             name="publicity"
-            placeholder="Publicity"
             className="p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-400"
             value={form.publicity}
             onChange={handleChange}
-            maxLength={10}
-          />
+            required
+          >
+            <option value="">Select Publicity</option>
+            <option value="Public">Public</option>
+            <option value="Private">Private</option>
+            <option value="Uncategorized">Uncategorized</option>
+          </select>
           {error && <div className="text-red-600 text-sm">{error}</div>}
           {success && <div className="text-green-600 text-sm">{success}</div>}
           <button

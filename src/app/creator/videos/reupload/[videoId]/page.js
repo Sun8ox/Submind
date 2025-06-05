@@ -1,6 +1,7 @@
 "use client";
 
 import { use, useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function ReuploadPage({ params }) {
   const { videoId } = use(params);
@@ -8,6 +9,8 @@ export default function ReuploadPage({ params }) {
   const [status, setStatus] = useState("");
   const [error, setError] = useState("");
   const [uploading, setUploading] = useState(false);
+
+  const router = useRouter();
 
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
@@ -61,6 +64,12 @@ export default function ReuploadPage({ params }) {
 
       setStatus("Video reuploaded successfully!");
       setFile(null);
+
+      setTimeout(() => {
+        router.push("/creator/videos");
+      }
+      , 500);
+      
     } catch (err) {
       setError("Upload failed.");
     }

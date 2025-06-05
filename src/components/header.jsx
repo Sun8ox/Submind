@@ -13,8 +13,6 @@ export default async function Header() {
 
     if (success == true) {
         loggedIn = true;
-    } else {
-        console.error("Failed to validate auth token:", message);
     }
     
     return (

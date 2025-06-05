@@ -23,11 +23,11 @@ export async function POST(request, { params }) {
             if (!success) return NextResponse.json({ success: false, message: message }, { status: 400 });
         }
         if (subscription) {
-            const { success, message } = validateText(subscription, 1, 10);
+            const { success, message } = validateText(subscription, 1, 20);
             if (!success) return NextResponse.json({ success: false, message: message }, { status: 400 });
         }
         if (publicity) {
-            const { success, message } = validateText(publicity, 1, 10);
+            const { success, message } = validateText(publicity, 1, 20);
             if (!success) return NextResponse.json({ success: false, message: message }, { status: 400 });
         }
 
