@@ -13,7 +13,7 @@ Auth:
 Videos:
 - home page - partialy done
 - deleting videos
-- editing 
+- editing video infos
 
 // Not very important
 - thumbnails

@@ -15,5 +15,6 @@ Neon serverless db
 ## Mail
 Resend
 
-
+## Aktuálna production adresa:  
+https://submind.sun8ox.me
 
