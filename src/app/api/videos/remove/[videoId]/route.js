@@ -4,12 +4,10 @@ import { getUserData } from '@/lib/auth/user';
 import { getVideoInfoById } from '@/lib/videos/db';
 import { validateId  } from '@/lib/validate';
 
-export async function GET(request) {
+export async function GET(request, { params}) {
     try {
-        const { searchParams } = new URL(request.url);
+        const { videoId } = await params;
         const cookieStore = await request.cookies;
-
-        const videoId = searchParams.get('videoId');
         
         // Validate videoId
         if (!videoId) return NextResponse.json({ success: false, message: "Video ID is required." }, { status: 400 });

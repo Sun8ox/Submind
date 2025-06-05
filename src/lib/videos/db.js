@@ -9,6 +9,14 @@ export async function getVideoInfoById(video_id) {
     return rows[0] || null;
 }
 
+export async function getVideosByUserId(userId, pageNumber = 1, pageSize = 10) {
+    const offset = (pageNumber - 1) * pageSize;
+
+    const rows = await sql.query("SELECT * FROM videos.info WHERE author = $1 ORDER BY created_at DESC LIMIT $2 OFFSET $3", [userId, pageSize, offset]);
+    
+    return rows || [];
+}
+
 export async function createVideoInfo(video_info) {
     const { name, description, author, subscription_type, publicity } = video_info;
 
@@ -25,7 +33,7 @@ export function removeVideoInfo(video_id) {
 export async function updateVideoInfo(video_id, video_info) {
     const { name, description, subscription_type, publicity } = video_info;
 
-    const rows = await sql.query("UPDATE videos.info SET name = $1, description = $2, subscription = $3, publicity = $4 WHERE id = $5 RETURNING *", [name, description, subscription_type, publicity, video_id]);
+    const rows = await sql.query("UPDATE videos.info SET name = COALESCE($1, name), description = COALESCE($2, description), subscription = COALESCE($3, subscription), publicity = COALESCE($4, publicity) WHERE id = $5 RETURNING *", [name, description, subscription_type, publicity, video_id]);
     
     if (rows.length === 0) return null;
     return rows[0] || null;

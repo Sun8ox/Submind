@@ -1,15 +1,17 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { Suspense, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 
-export default function LoginPage() {
+
+export function LoginForm() {
   const [emailOrUsername, setEmailOrUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -40,7 +42,9 @@ export default function LoginPage() {
       setPassword("");
       setSuccess("Login successful!");
 
-      router.push("/");
+      const redirectUrl = searchParams.get("redirect") || "/";
+
+      router.push(redirectUrl);
     } else {
         setError(result.message || "Login failed. Please try again.");
     }
@@ -84,5 +88,13 @@ export default function LoginPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense>
+      <LoginForm />
+    </Suspense>
   );
 }

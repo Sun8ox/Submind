@@ -17,7 +17,7 @@ export default function VideoPlayer({ videoId }) {
 
   useEffect(() => {
     const fetchUrl = async () => {
-      const response = await fetch(`/api/videos/view?videoId=${videoId}`);
+      const response = await fetch(`/api/videos/view/${videoId}`);
       const { success, message, videoUrl, videoInfo } = await response.json();
 
       if (!response.ok) return;

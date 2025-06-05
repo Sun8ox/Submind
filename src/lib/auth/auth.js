@@ -15,7 +15,14 @@ export async function validateToken(token) {
         const decoded = jwt.verify(token, JWT_SECRET);
         if (!decoded || !decoded.id) return { success: false, message: "Invalid token" };
 
-        return { success: true, userId: decoded.id };
+        const userData = {
+            id: decoded.id,
+            username: decoded.userName,
+            email: decoded.email,
+            role: decoded.role
+        }
+
+        return { success: true, userId: decoded.id, userData: userData, message: "Token is valid" };
     } catch (error) {
         // In case of wrong token, return failure
         console.error("Token validation error:", error);
@@ -44,11 +51,10 @@ export async function registerUser(userData) {
         const registeredUser = await dbCreateUser(username, email, passwordHash);
         if (!registeredUser) return { success: false, message: "Failed to register user" };
         if (!registeredUser.id) return { success: false, message: "Failed to register user" };
-        
-        const userId = registeredUser.id;
+
         const verificationToken = Math.floor(Math.random() * (999999 - 100000) + 100000);
         // Create verification token for the user in the database
-        const verification = await dbCreateVerificationToken(userId, verificationToken);
+        const verification = await dbCreateVerificationToken(registeredUser, verificationToken);
         if (!verification) return { success: false, message: "Failed to create verification token" };
 
 
@@ -58,7 +64,7 @@ export async function registerUser(userData) {
         if (!emailVerificationStatus.success) return { success: false, message: "Failed to send verification email" };
 
         // Sign JWT token to authenticate user
-        const token = jwt.sign({ id: userId }, JWT_SECRET, { expiresIn: '7d' });
+        const token = jwt.sign({ id: registeredUser.id, userName: registeredUser.username, email: registeredUser.email, role: registeredUser.role }, JWT_SECRET, { expiresIn: '7d' });
         if (!token) return { success: false, message: "Failed to create authentication token" };
         
         // Return success message
@@ -94,7 +100,7 @@ export async function authenticateUser(userLoginData) {
         }
 
         // Sign JWT token to authenticate user
-        const token = jwt.sign({ id: userData.id }, JWT_SECRET, { expiresIn: '7d' });
+        const token = jwt.sign({ id: userData.id, userName: userData.username, email: userData.email, role: userData.role }, JWT_SECRET, { expiresIn: '7d' });
 
         return {
             success: true,

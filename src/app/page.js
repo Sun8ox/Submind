@@ -35,6 +35,11 @@ export default function Home() {
       {loading && <div className="text-gray-600">Loading...</div>}
       {error && <div className="text-red-600 mb-4">{error}</div>}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-5xl">
+        {videos.length === 0 && !loading && !error && (
+          <div className="col-span-1 md:col-span-2 lg:col-span-3 text-center text-gray-500">
+            No videos available at the moment.
+          </div>
+        )}
         {videos.map(video => (
           <a href={"/player/" + video.id} key={video.id} className="bg-white rounded-xl shadow p-4 flex flex-col">
             <div className="font-semibold text-lg text-indigo-700 mb-2">{video.name}</div>

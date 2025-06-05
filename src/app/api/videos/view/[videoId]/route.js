@@ -7,11 +7,11 @@ import { getVideoInfoById } from '@/lib/videos/db';
 import { validateId } from '@/lib/validate';
 
 
-export async function GET(request) {
+export async function GET(request, { params }) {
     try {
 
         // Get video ID from the request query
-        const videoId = await request.nextUrl.searchParams.get('videoId');
+        const { videoId } = await params;
         if (!videoId) return NextResponse.json({ success: false, message: "Video ID is required" }, { status: 400 });
 
         // Validate videoId

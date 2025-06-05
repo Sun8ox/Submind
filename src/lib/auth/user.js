@@ -26,6 +26,26 @@ export async function getUserData(authToken) {
     }
 }
 
+export async function validateAuthToken(authToken) {
+    try {
+        // Check if auth token exists
+        if (!authToken) return { success: false, message: "Authentication token is missing. Please log in again." };
+        if (!authToken.value) return { success: false, message: "Authentication token is invalid. Please log out and login again." };
+
+        // Decode and validate the token
+        const { success, message, userId, userData } = await validateToken(authToken.value);
+
+        if (success === false) return { success: false, message: message };
+        if (!userId) return { success: false, message: "Authentification token is invalid." };
+
+        // Return user data
+        return { success: true, userId, userData};
+    } catch (error) {
+        console.error("Token validation error:", error);
+        return { success: false, message: "Invalid token" };
+    }
+}
+
 // TODO
 export async function getUserByUsername(username) {
 

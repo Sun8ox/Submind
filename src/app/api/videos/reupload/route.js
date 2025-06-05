@@ -4,6 +4,8 @@ import { SubscriptionTypes } from '@/lib/subscriptions/types';
 import { getVideoInfoById } from '@/lib/videos/db';
 import { getPresignedVideoUrl } from '@/lib/videos/storage';
 import { getUserData } from '@/lib/auth/user';
+import { validateId } from '@/lib/validate';
+import { validateAuthToken } from '@/lib/auth/user';
 
 const validContentTypes = ["video/mp4", "video/webm", "video/ogg"];
 
@@ -17,7 +19,7 @@ export async function POST(request) {
         const authToken = cookieStore.get('Submind.AuthToken');
 
         // Check auth token
-        const { success, message, user } = await getUserData(authToken);
+        const { success, message, userData: user } = await validateAuthToken(authToken);
         if (!success) return NextResponse.json({ success: false, message: message }, { status: 401 });
         if (user.role !== "CREATOR" && user.role !== "ADMIN") return NextResponse.json({ success: false, message: "You do not have permission to upload videos" }, { status: 403 });
     
