@@ -4,17 +4,18 @@ import { getSubscriptionByUserId } from '@/lib/subscriptions/db';
 import { isNextPaymentDue } from '@/lib/subscriptions/utils';
 import { getSignedVideoUrl } from '@/lib/videos/storage';
 import { getVideoInfoById } from '@/lib/videos/db';
+import { validateId } from '@/lib/validate';
 
 export async function GET(request) {
     try {
 
         // Get video ID from the request query
-        const videoIdParam = request.nextUrl.searchParams.get('videoId');
-        if (!videoIdParam) return NextResponse.json({ success: false, message: "Video ID is required" }, { status: 400 });
+        const videoId = await request.nextUrl.searchParams.get('videoId');
+        if (!videoId) return NextResponse.json({ success: false, message: "Video ID is required" }, { status: 400 });
 
         // Validate videoId
-        const videoId = Number(videoIdParam);
-        if (isNaN(videoId) || videoId <= 0) return NextResponse.json({ success: false, message: "Invalid video ID" }, { status: 400 });
+        const { success: isValidId, message: idMessage } = validateId(videoId);
+        if (!isValidId) return NextResponse.json({ success: false, message: idMessage }, { status: 400 });
 
         // Get video info from the database
         const videoInfo = await getVideoInfoById(videoId);

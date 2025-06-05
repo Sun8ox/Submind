@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { changePassword } from '@/lib/auth/auth'; 
-import { validateUserId, validatePassword } from '@/lib/validate';
+import { validateId, validatePassword } from '@/lib/validate';
 import { getUserData } from '@/lib/auth/user';
 
 export async function POST(request) {
@@ -21,7 +21,7 @@ export async function POST(request) {
         }
         
         // Validate user ID and passwords
-        const { success: isValidUserId, message: userIdMessage } = validateUserId(user.id);
+        const { success: isValidUserId, message: userIdMessage } = validateId(user.id);
         if (!isValidUserId) return NextResponse.json({ success: false, message: userIdMessage }, { status: 400 });
         const { success: isValidOldPassword, message: oldPasswordMessage } = validatePassword(oldPassword);
         if (!isValidOldPassword) return NextResponse.json({ success: false, message: oldPasswordMessage }, { status: 400 });
