@@ -22,18 +22,13 @@ export function validateUsername(username) {
     return { success: true };
 }
 
-// ID
-export function validateId(Id) {
-    try {
-        Number(Id);
-        if (isNaN(Id) || Id <= 0) return { success: false, message: "ID must be a positive number" };
-        if (!Number.isInteger(Number(Id))) return { success: false, message: "ID must be an integer" };
+// User ID
+export function validateUserId(userId) {
+    if (typeof userId !== "number") return { success: false, message: "User ID must be a number" };
 
+    // I dont think that just plain integer can be anyhow exploited
 
-        return { success: true };
-    } catch (error) {
-        return { success: false, message: "Invalid ID" };
-    }
+    return { success: true };
 }
 
 // Text: 1-1000 chars, no HTML tags

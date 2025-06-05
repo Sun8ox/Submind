@@ -18,14 +18,8 @@ export async function createVideoInfo(video_info) {
     return rows[0] || null;
 }
 
-export function removeVideoInfo(video_id) {
-    return sql.query("DELETE FROM videos.info WHERE id = $1", [video_id]);
-}
-
-export async function updateVideoInfo(video_id, video_info) {
-    const { name, description, subscription_type, publicity } = video_info;
-
-    const rows = await sql.query("UPDATE videos.info SET name = $1, description = $2, subscription = $3, publicity = $4 WHERE id = $5 RETURNING *", [name, description, subscription_type, publicity, video_id]);
+export async function setVideoUrl(video_id, url) {
+    const rows = await sql.query("UPDATE videos.info SET video_url = $1 WHERE id = $2 RETURNING *", [url, video_id]);
     if (rows.length === 0) return null;
 
     return rows[0] || null;
@@ -34,7 +28,7 @@ export async function updateVideoInfo(video_id, video_info) {
 export async function getVideosBySubscription(subscriptionType, pageNumber = 1, pageSize = 10, publicity = "Public") {
     const offset = (pageNumber - 1) * pageSize;
 
-    const rows = await sql.query("SELECT * FROM videos.info WHERE (subscription = $1 OR subscription = 'Free') AND publicity = $2 ORDER BY created_at DESC LIMIT $3 OFFSET $4", [subscriptionType, publicity, pageSize, offset]);
+    const rows = await sql.query("SELECT * FROM videos.info WHERE subscription = $1 OR subscription = 'Free' AND publicity = $2 ORDER BY created_at DESC LIMIT $3 OFFSET $4", [subscriptionType, publicity, pageSize, offset]);
     
     return rows || [];
 }

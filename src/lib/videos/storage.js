@@ -1,4 +1,4 @@
-import { S3Client, PutObjectCommand, GetObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
+import { S3Client, PutObjectCommand, GetObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
 const S3 = new S3Client({
@@ -31,19 +31,4 @@ export async function getPresignedVideoUrl(videoId, contentType, expiresIn = 5*6
   });
 
   return await getSignedUrl(S3, command, { expiresIn: expiresIn });
-}
-
-export async function removeVideo(videoId) {
-  try {
-    const command = new DeleteObjectCommand({
-      Bucket: process.env.OBJECT_STORAGE_BUCKET_NAME,
-      Key: "video-" + videoId,
-    });
-
-    await S3.send(command);
-    return { success: true, message: 'Video deleted successfully' };
-  } catch (error) {
-    console.error('Error deleting video:', error);
-    return { success: false, message: 'Failed to delete video' };
-  }
 }

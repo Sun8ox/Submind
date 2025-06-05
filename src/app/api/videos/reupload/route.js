@@ -25,22 +25,13 @@ export async function POST(request) {
 
         const { videoId, fileSize, contentType } = await request.json();
 
-        // Validate data
         if (!fileSize) return NextResponse.json({ success: false, message: "File size is required" }, { status: 400 });
         if (fileSize && typeof fileSize !== 'number') return NextResponse.json({ success: false, message: "File size must be a number" }, { status: 400 });
         if (fileSize && fileSize <= 0) return NextResponse.json({ success: false, message: "File size must be greater than 0" }, { status: 400 });
         if (fileSize && fileSize > fileMaxSize) return NextResponse.json({ success: false, message: "File is too big." }, { status: 400 });
 
-        if (!videoId) return NextResponse.json({ success: false, message: "Video ID is required" }, { status: 400 });
-        const { success: isValidId, message: idMessage } = validateId(videoId);
-        if (!isValidId) return NextResponse.json({ success: false, message: idMessage }, { status: 400 });
-        
-        if (!contentType) return NextResponse.json({ success: false, message: "Content type is required" }, { status: 400 });
-        if (!validContentTypes.includes(contentType)) return NextResponse.json({ success: false, message: "Invalid content type. Supported types are: " + validContentTypes.join(", ") }, { status: 400 });
-
-
-        
         // Check if video author is the same as the userId
+
         const videoInfo = await getVideoInfoById(videoId);
         if (!videoInfo) return NextResponse.json({ success: false, message: "Video not found" }, { status: 404 });
         if (videoInfo.author != user.id) return NextResponse.json({ success: false, message: "You do not have permission to reupload this video" }, { status: 403 });
