@@ -16,5 +16,31 @@ Neon serverless db
 Resend
 
 ## Aktuálna production adresa:  
-https://submind.sun8ox.me
+https://submind.sun8ox.me  
+  
+# API Structure    
+## Authentifikácia
+- /api/auth
+    - /login -> Prihlásenie    
+    - /register -> Registrácia  
+    - /verify -> Verifikácia účtu  
+    - /logout -> Odhlásenie   
+    - /changePassword -> Zmena hesla  
 
+## Použivatelia
+- /api/users
+    - /get
+        - /public -> Získanie "public" informácii (bez potreby tokenu)  
+        - /user -> Získanie informácii iba pre daného uživateľa (potrebný token)
+
+## Videá  
+- /api/videos
+    - /addComment -> nedokončené  
+    - /like -> nedokončené
+    - /edit/[videoId] -> Úprava informácii o videu  
+    - /get/[videoId] -> Získanie informácii o videu (potrebný token)  
+    - /home -> Získanie videí na homepage takže   všetky public videa ku ktorým má daný uživateľ prístup  
+    - /remove/[videoId] -> Odstránenie videa (potrebný token)  
+    - /reupload -> Reupload videa v storage (potrebný token)  
+    - /upload -> Upload a pridanie videa  
+    - /view/[videoId] -> Generovanie presigned URL adresy na zobrazenie videa  
