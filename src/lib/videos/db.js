@@ -9,10 +9,15 @@ export async function getVideoInfoById(video_id) {
     return rows[0] || null;
 }
 
-export async function getVideosByUserId(userId, pageNumber = 1, pageSize = 10) {
+export async function getVideosByUserId(userId, pageNumber = 1, pageSize = 10, publicOnly = true) {
     const offset = (pageNumber - 1) * pageSize;
 
-    const rows = await sql.query("SELECT * FROM videos.info WHERE authorid = $1 ORDER BY created_at DESC LIMIT $2 OFFSET $3", [userId, pageSize, offset]);
+    let rows = [];
+    if (publicOnly) {
+        rows = await sql.query("SELECT * FROM videos.info WHERE authorid = $1 AND publicity = 'Public' ORDER BY created_at DESC LIMIT $2 OFFSET $3", [userId, pageSize, offset]);
+    } else {
+        rows = await sql.query("SELECT * FROM videos.info WHERE authorid = $1 ORDER BY created_at DESC LIMIT $2 OFFSET $3", [userId, pageSize, offset]);
+    }
     
     return rows || [];
 }

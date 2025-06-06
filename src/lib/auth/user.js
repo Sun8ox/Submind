@@ -1,7 +1,7 @@
 import { validateToken } from "./auth.js";
 import { getUserById } from "./db.js";
 
-export async function getUserData(authToken) {
+export async function getUserData(authToken, mustBeVerified = true) {
     try {
         // Check if auth token exists
         if (!authToken) return { success: false, message: "Authentication token is missing. Please log in again." };
@@ -16,7 +16,9 @@ export async function getUserData(authToken) {
         const userData = await getUserById(userId);
         if (!userData) return { success: false, message: "User not found." };
         if (userData.banned) return { success: false, message: "User is banned." };
-        if (userData.verified === false) return { success: false, message: "User is not verified." };
+        
+        if(mustBeVerified === true) if (userData.verified === false) return { success: false, message: "User is not verified." };
+        
 
         // Return user data
         return { success: true, user: userData };
@@ -59,6 +61,7 @@ export async function getPublicUserInfo(userId){
         user: {
             id: userData.id,
             username: userData.username,
+            fullname: userData.fullname || null,
             role: userData.role,
             bio: userData.bio,
             createdAt: userData.created_at

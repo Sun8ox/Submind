@@ -24,7 +24,7 @@ export async function GET(request, { params}) {
         if (!videoInfo) return NextResponse.json({ success: false, message: "Video not found." }, { status: 404 });
 
         // Check if user is authorized to delete the video
-        if (user.role != "Admin" && user.id != videoInfo.authorid) return NextResponse.json({ success: false, message: "You are not authorized to delete this video." }, { status: 403 });
+        if (user.role != "ADMIN" && user.id != videoInfo.authorid) return NextResponse.json({ success: false, message: "You are not authorized to delete this video." }, { status: 403 });
         
         const { success, message } = await deleteVideo(videoId);
         if (success === false) return NextResponse.json({ success: false, message }, { status: 500 });

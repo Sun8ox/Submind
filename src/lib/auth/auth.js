@@ -54,7 +54,7 @@ export async function registerUser(userData) {
 
         const verificationToken = Math.floor(Math.random() * (999999 - 100000) + 100000);
         // Create verification token for the user in the database
-        const verification = await dbCreateVerificationToken(registeredUser, verificationToken);
+        const verification = await dbCreateVerificationToken(registeredUser.id, verificationToken);
         if (!verification) return { success: false, message: "Failed to create verification token" };
 
 

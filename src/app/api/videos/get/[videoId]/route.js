@@ -21,7 +21,7 @@ export async function GET(request, { params }) {
         // Get video info from database
         const videoInfo = await getVideoInfoById(videoId);
         if (!videoInfo) return NextResponse.json({ success: false, message: 'Video not found' }, { status: 404 });
-        if (videoInfo.authorid != userId && userData.role != "Admin") return  NextResponse.json({ success: false, message: 'You do not have permission to view this video' }, { status: 403 });
+        if (videoInfo.authorid != userId && userData.role != "ADMIN") return  NextResponse.json({ success: false, message: 'You do not have permission to view this video' }, { status: 403 });
         
 
         return NextResponse.json({ success: true, video: videoInfo }, { status: 200 });

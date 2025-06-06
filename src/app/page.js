@@ -40,9 +40,23 @@ export default function Home() {
           </div>
         )}
         {videos.map(video => (
-          <a href={"/player/" + video.id} key={video.id} className="relative h-30 bg-white rounded-xl shadow p-4 flex flex-col">
+          <div key={video.id} className="relative h-auto bg-white rounded-xl shadow p-4 flex flex-col">
+            <a href={"/player/" + video.id} className="relative w-full aspect-video bg-gray-200 rounded-lg mb-2">
+              <img
+                src={video.thumbnail}
+                alt=""
+                className="w-full h-full object-cover rounded-lg border-none"
+              />
+              <div className="w-full h-full flex flex-col justify-center absolute text-8xl top-0 left-0 text-center text-black z-40"> 
+                <span>
+                ⏵
+                </span>
+              </div>
+            </a>
             <div className="font-semibold text-lg text-indigo-700 mb-2">{video.name}</div>
-            <div className="text-gray-600 mb-1">{video.description}</div>
+            <div className="text-gray-600 mb-1 h-10 overflow-hidden">
+              {video.description}
+            </div>
             <div className="text-xs text-gray-500 flex flex-row gap-1 bg-white absolute bottom-2 left-2">
               <span>
                 Subscription: <span className="font-semibold">{video.subscription}</span>
@@ -56,7 +70,7 @@ export default function Home() {
                 Created at: <span className="font-semibold">{new Date(video.created_at).toLocaleString()}</span>
               </span>
             </div>
-          </a>
+          </div>
         ))}
       </div>
       <div className="flex gap-2 mt-8">
