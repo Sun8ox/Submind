@@ -4,8 +4,11 @@ Security:
 - Middleware
 
 Auth:
-- editing account info - in progress
+- editing account info
 - profile pictures
+
+// Not very important
+- editing settings
 
 // Not very important
 - deleting accounts
@@ -14,9 +17,9 @@ Videos:
 - home page - partialy done
 - deleting videos
 - editing video infos
+- thumbnails
 
 // Not very important
-- thumbnails
 - liking
 - adding comments
 
@@ -26,19 +29,14 @@ Subscriptions:
 
 UI:
 - almost everything
-    User:
-    - main page (see videos)
-    - account page (see your account info, change subscriptions and etc)
-    - player page with comments, likes, description and etc
     Creator:
-    - upload page
     - earnings and subscription "analytics" (or smt like that) page
-    - settings
 
 Optional:
     UI:
         Admin:
         - view users, block them and etc
+
     Allow both subscriptions to watch something
 
 - admin management page
