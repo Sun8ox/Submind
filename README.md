@@ -32,11 +32,12 @@ https://submind.sun8ox.me
     - /get
         - /public -> Získanie "public" informácii (bez potreby tokenu)  
         - /user -> Získanie informácii iba pre daného uživateľa (potrebný token)
+    - /settings -> Získanie a upravenie nastavení (nedokončené)
 
 ## Videá  
 - /api/videos
-    - /addComment -> nedokončené  
-    - /like -> nedokončené
+    - /addComment -> Pridávanie komentárov (nedokončené)  
+    - /like -> Likovanie videa (nedokončené)
     - /edit/[videoId] -> Úprava informácii o videu  
     - /get/[videoId] -> Získanie informácii o videu (potrebný token)  
     - /home -> Získanie videí na homepage takže   všetky public videa ku ktorým má daný uživateľ prístup  
@@ -44,3 +45,10 @@ https://submind.sun8ox.me
     - /reupload -> Reupload videa v storage (potrebný token)  
     - /upload -> Upload a pridanie videa  
     - /view/[videoId] -> Generovanie presigned URL adresy na zobrazenie videa  
+
+### Common API response  
+- JSON formát
+- common properties:
+    - success: boolean -> označuje či sa podarilo úspešne vykonať úlohu
+    - message: string -> obsahuje správu ktorú daný endpoint alebo funkcia v ňom vracia. Môžu byť priamo implementované do UI ako error/success messages
+
