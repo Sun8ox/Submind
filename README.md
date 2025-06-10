@@ -17,6 +17,19 @@ Resend
 
 ## Aktuálna production adresa:  
 https://submind.sun8ox.me  
+
+# Povinné environment variables  
+DATABASE_URL (string) - Adresa postgres databázy, najlepšie Neon (neviem či iné fungujú)  
+  
+OBJECT_STORAGE_ENDPOINT (string) - HTTP adresa S3 compatible object storage (ja používam Cloudflare R2)  
+ 
+OBJECT_STORAGE_ACCESS_KEY_ID (string) - Authentifikácia na S3 compatible object storage  
+ 
+OBJECT_STORAGE_SECRET_ACCESS_KEY (string) - Authentifikácia na S3 compatible object storage  
+ 
+OBJECT_STORAGE_BUCKET_NAME (string) - Názov bucketu na S3 compatible object storage  
+
+JWT_SECRET (string) - JWT private key  
   
 # API Structure    
 ## Authentifikácia
