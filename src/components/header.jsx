@@ -4,7 +4,7 @@ import { validateAuthToken } from "@/lib/auth/user";
 import { cookies } from 'next/headers'
 
 
-export default async function Header() {
+export async function Header() {
     const cookieStore = await cookies();
     const authToken = cookieStore.get('Submind.AuthToken');
 
